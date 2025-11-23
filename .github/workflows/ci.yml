@@ -18,7 +18,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: app
+          POSTGRES_DB: jalan_rusak
         ports:
           - 5432:5432
         options: >-
@@ -45,15 +45,15 @@ jobs:
           cat > .env <<'EOF'
           TZ=UTC
           PORT=3333
-          HOST=0.0.0.0
+          HOST=localhost
           LOG_LEVEL=info
           APP_KEY=ci_dummy_key_please_replace
-          NODE_ENV=testing
+          NODE_ENV=test
           DB_HOST=127.0.0.1
           DB_PORT=5432
           DB_USER=postgres
-          DB_PASSWORD=postgres
-          DB_DATABASE=app
+          DB_PASSWORD=Fachri151515
+          DB_DATABASE=jalan_rusak
           EOF
 
       - name: Wait for Postgres
