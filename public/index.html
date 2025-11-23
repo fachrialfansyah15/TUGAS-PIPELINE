@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="style.css">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Laporan Kerusakan Jalan</title>
+  <style>
+    table, td, th {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+<body>
+<h2>Daftar Laporan Kerusakan Jalan Di Kota Palu</h2>
+
+<a href="tambah.html" class="btn">+ Tambah Laporan</a>
+<br><br>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Nama Jalan</th>
+    <th>Deskripsi</th>
+    <th>Koordinat</th>
+    <th>Foto</th>
+    <th>Aksi</th>
+  </tr>
+
+  <tbody id="data-body"></tbody>
+</table>
+
+<script>
+  async function loadData() {
+    const res = await fetch('/api/laporan')
+    const data = await res.json()
+
+    let html = ''
+    data.forEach(item => {
+      html += `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.nama_jalan}</td>
+          <td>${item.deskripsi}</td>
+          <td>${item.koordinat}</td>
+          <td><img src="/uploads/${item.foto}" width="80"></td>
+          <td>
+            <a href="edit.html?id=${item.id}">Edit</a> |
+            <a href="#" onclick="hapus(${item.id})">Hapus</a>
+          </td>
+        </tr>
+      `
+    })
+
+    document.getElementById('data-body').innerHTML = html
+  }
+
+  async function hapus(id) {
+    if (!confirm("Hapus data?")) return
+
+    await fetch(`/api/laporan/${id}`, {
+      method: 'DELETE',
+    })
+
+    loadData()
+  }
+
+  loadData()
+</script>
+
+</body>
+</html>
