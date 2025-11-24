@@ -4,7 +4,6 @@ import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 
 export default class LaporansController {
-
   public async index({ response }: HttpContext) {
     const data = await Laporan.all()
     return response.json(data)
@@ -13,14 +12,14 @@ export default class LaporansController {
   public async store({ request, response }: HttpContext) {
     const foto = request.file('foto', {
       size: '5mb',
-      extnames: ['jpg', 'jpeg', 'png', 'gif']
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
     })
 
     let fotoName = ''
     if (foto) {
       fotoName = `${cuid()}.${foto.extname}`
       await foto.move(app.makePath('public/uploads'), {
-        name: fotoName
+        name: fotoName,
       })
     }
 
@@ -28,7 +27,7 @@ export default class LaporansController {
       nama_jalan: request.input('nama_jalan'),
       deskripsi: request.input('deskripsi'),
       koordinat: request.input('koordinat'),
-      foto: fotoName
+      foto: fotoName,
     }
 
     const laporan = await Laporan.create(data)
@@ -40,19 +39,19 @@ export default class LaporansController {
     
     const foto = request.file('foto', {
       size: '5mb',
-      extnames: ['jpg', 'jpeg', 'png', 'gif']
+      extnames: ['jpg', 'jpeg', 'png', 'gif'],
     })
 
     const data: any = {
       nama_jalan: request.input('nama_jalan'),
       deskripsi: request.input('deskripsi'),
-      koordinat: request.input('koordinat')
+      koordinat: request.input('koordinat'),
     }
 
     if (foto) {
       const fotoName = `${cuid()}.${foto.extname}`
       await foto.move(app.makePath('public/uploads'), {
-        name: fotoName
+        name: fotoName,
       })
       data.foto = fotoName
     }
