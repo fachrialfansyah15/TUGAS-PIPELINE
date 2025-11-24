@@ -36,7 +36,6 @@ export default class LaporansController {
 
   public async update({ params, request, response }: HttpContext) {
     const laporan = await Laporan.findOrFail(params.id)
-    
     const foto = request.file('foto', {
       size: '5mb',
       extnames: ['jpg', 'jpeg', 'png', 'gif'],

@@ -74,14 +74,14 @@ jobs:
         run: |
           npx --yes ts-node-maintained -e "console.log('checking migrations dir...')" >/dev/null 2>&1 || true
           if [ -d database/migrations ] && [ "$(ls -A database/migrations | wc -l)" -gt 0 ]; then
-            echo "Running migrations"; node ace migration:run --force
+            echo "Running migrations"; node ace migration:run
           else
             echo "No migrations found, skipping"
           fi
 
       - name: Seed database (optional)
         run: |
-          node ace db:seed --force || echo "No seeds to run"
+          node ace db:seed || echo "No seeds to run"
 
       - name: Lint (ESLint)
         run: npm run lint
