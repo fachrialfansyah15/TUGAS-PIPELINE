@@ -100,10 +100,13 @@ jobs:
 
       - name: Smoke test server
         run: |
-          nohup node ace serve > server.log 2>&1 & echo $! > server.pid
-          for i in {1..30}; do
+          # Start production server explicitly with HOST/PORT from env
+          HOST=127.0.0.1 PORT=3333 nohup node bin/server.js > server.log 2>&1 & echo $! > server.pid
+          # Wait up to ~60s for port to be ready, printing log snippet periodically
+          for i in {1..60}; do
             nc -z 127.0.0.1 3333 && echo "Server is up" && break
-            echo "Waiting server..." && sleep 2
+            if [ $((i % 5)) -eq 0 ]; then echo "--- last 20 lines of server.log ---"; tail -n 20 server.log || true; fi
+            echo "Waiting server..." && sleep 1
           done
-          curl -f http://127.0.0.1:3333/api/laporan || (echo "Smoke test failed" && cat server.log && exit 1)
+          curl -f http://127.0.0.1:3333/api/laporan || (echo "Smoke test failed" && echo "==== server.log ====" && cat server.log && exit 1)
           kill $(cat server.pid) || true
