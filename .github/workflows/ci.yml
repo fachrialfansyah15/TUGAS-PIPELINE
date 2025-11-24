@@ -12,12 +12,14 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
     services:
       postgres:
         image: postgres:15
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
           POSTGRES_DB: jalan_rusak
         ports:
           - 5432:5432
@@ -47,14 +49,19 @@ jobs:
           PORT=3333
           HOST=localhost
           LOG_LEVEL=info
-          APP_KEY=ci_dummy_key_please_replace
+          APP_KEY=${{ secrets.CI_APP_KEY || 'ci_dummy_key_please_replace' }}
           NODE_ENV=test
           DB_HOST=127.0.0.1
           DB_PORT=5432
           DB_USER=postgres
-          DB_PASSWORD=Fachri151515
+          DB_PASSWORD=${{ secrets.CI_DB_PASSWORD }}
           DB_DATABASE=jalan_rusak
           EOF
+
+      - name: Show NODE_ENV for debugging
+        run: |
+          echo "NODE_ENV from job env: $NODE_ENV"
+          grep NODE_ENV .env || true
 
       - name: Wait for Postgres
         run: |
