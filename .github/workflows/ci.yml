@@ -100,8 +100,8 @@ jobs:
 
       - name: Smoke test server
         run: |
-          # Start server (TypeScript) via ts-node-maintained with explicit HOST/PORT
-          HOST=127.0.0.1 PORT=3333 nohup npx --yes ts-node-maintained bin/server.ts > server.log 2>&1 & echo $! > server.pid
+          # Start server (TypeScript) via tsx (reliable via npx) with explicit HOST/PORT
+          HOST=127.0.0.1 PORT=3333 nohup npx --yes tsx bin/server.ts > server.log 2>&1 & echo $! > server.pid
           # Wait up to ~60s for port to be ready, printing log snippet periodically
           for i in {1..60}; do
             nc -z 127.0.0.1 3333 && echo "Server is up" && break
